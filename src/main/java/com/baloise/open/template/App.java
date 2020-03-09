@@ -1,29 +1,43 @@
-/*
- * Copyright 2018 Baloise Group
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.baloise.open.template;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
 
-/**
- * @author Markus Tiede
- */
 public class App {
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Map<String, Integer> myMap = new HashMap<String, Integer>();
+        try {
+
+            Scanner scanner = new Scanner(new File("test.txt"));
+            while (scanner.hasNextLine()) {
+                String clean = scanner.nextLine().replaceAll("[^a-zA-Z]", " ");
+                String[] foo = clean.split(" ");
+
+                for (int i=0; i < foo.length; i++)
+                {
+                    int bar = 0;
+                    if (myMap.containsKey(foo[i])){
+                        bar = myMap.get(foo[i]);
+                    }
+                    bar += 1;
+                    myMap.put(foo[i].toLowerCase(), bar);
+                }
+            }
+
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Set set = myMap.entrySet();
+        Iterator iterator = set.iterator();
+        while(iterator.hasNext()) {
+            Map.Entry mentry = (Map.Entry)iterator.next();
+            System.out.printf("%d: %s\n", mentry.getValue(),mentry.getKey());
+        }
+
     }
+
 }
+
+
